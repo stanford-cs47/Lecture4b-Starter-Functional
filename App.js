@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react'; // Remember to import your hooks!
 import {
   StyleSheet,
   View,
@@ -12,67 +12,40 @@ import ToDo from './ToDo.js';
 // Import third-party components here
 import { AntDesign } from '@expo/vector-icons';
 
+export default function App() {
+  // Initializing the "state"
+  const [todos, setTodos] = useState([]);
+  const [text, setText] = useState("");
+  const [count, setCount] = useState(1);
+  const [myInterval, setMyInterval] = useState();
 
-// BONUS: Make this a function rather than a class
-// Make sure to use useState instead of defining state
-export default class App extends React.Component{
-  // Here's what we will do step by step:
-  // 1. Automatically add ToDo items by setting up an interval in componentDidMount 
-  // 2. Stop the automatic addition of ToDo items in componentWillUnmount
-  // 3. 
-
-  // NOTICE the two additions to our state! You do not have to use "count" in your
-  // solution -- it's just there to help generate the "Item #___" ToDo item text.
-  // You should, however, use "interval." 
-  state = {
-    todos: [],
-    text: "",
-    count: 1,
-    interval: null,
-  }
-
-  // 1. Set up an interval that adds a new item to the ToDo list every second.
-  // Notice the two additions to our state object! Using "count" is not required,
-  // but you should definitely use "interval" in your solution.
-  //
-  // Hint: Check out https://www.w3schools.com/jsref/met_win_setinterval.asp
-  componentDidMount() {
-    // Put your code for step 1 here!
-  }
-
-  componentWillUpdate(prevProps, prevState) {
-    // Put your code for step 3 here!
-  }
-
-  // 2. Clean up! When your component unmounts, you don't want your interval to
-  // continue adding items to your ToDo list, so make sure you clean up your 
-  // interval! 
-  //
-  // Hint: Check out https://www.w3schools.com/jsref/met_win_setinterval.asp
-  componentWillUnmount() {
-    // Put your code for step 2 here!
-  }
+  // TODO: Use "useEffect" to begin our interval (like componentDidMount)
+  // and to close our interval (like componentWillUnmount)
+  useEffect(() => {
+    // Write your code here
+  }, [todos, count]); // This basically tells useEffect that we want it to run every time todos or count changes.
 
   onChangeText = text => {
-    this.setState({text});
+    setText(text);
   }
 
   addTodo = () => {
-    let todosCopy = JSON.parse(JSON.stringify(this.state.todos));
-    todosCopy.push(this.state.text);
-    this.setState({ todos: todosCopy, text: "" });
+    let todosCopy = JSON.parse(JSON.stringify(todos));
+    todosCopy.push(text);
+    setTodos(todosCopy);
+    setText("");
   }
 
   deleteTodo = index => {
-    let todosCopy = JSON.parse(JSON.stringify(this.state.todos));
+    let todosCopy = JSON.parse(JSON.stringify(todos));
     todosCopy.splice(index, 1);
-    this.setState({ todos: todosCopy });
+    setTodos(todosCopy);
   }
 
   renderTodo = (index, item) => (
     <ToDo
       text={item}
-      deleteTodo={() => this.deleteTodo(index)}
+      deleteTodo={() => deleteTodo(index)}
     />
   )
 
@@ -80,44 +53,34 @@ export default class App extends React.Component{
     return index.toString();
   }
 
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.flatlist}>
-          <FlatList
-            data={this.state.todos}
-            // We encapsulated the code for renderItem into renderTodo.
-            renderItem={({ index, item }) => this.renderTodo(index, item)}
-            keyExtractor={(item, index) => this.keyExtractor(index)}
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.flatlist}>
+        <FlatList
+          data={todos}
+          renderItem={({ index, item }) => renderTodo(index, item)}
+          keyExtractor={(item, index) => keyExtractor(index)}
+        />
+      </View>
+      <View style={{flexDirection: 'row'}}>
+        <TextInput
+          style={styles.textinput}
+          onChangeText={text => onChangeText(text)}
+          value={text}
+        />
+
+        <TouchableOpacity onPress={addTodo}>
+          <AntDesign
+            style={{ marginLeft: 10}}
+            name='pluscircle'
+            size={40}
+            color='pink'
           />
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <TextInput
-            style={styles.textinput}
-            onChangeText={text => this.onChangeText(text)}
-            value={this.state.text}
-          />
-          {/* 
-            3. Rewrite the following button to be a vector icon
-            that you can click to add a ToDo item
+        </TouchableOpacity>
 
-            Hint: To make the vector icon clickable, see
-            TouchableOpacity 
-          */}
-
-          <TouchableOpacity onPress={this.addTodo}>
-            <AntDesign
-              style={{ marginLeft: 10}}
-              name='pluscircle'
-              size={40}
-              color='pink'
-            />
-          </TouchableOpacity>
-
-        </View>
-      </SafeAreaView>
-    );
-  }
+      </View>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
