@@ -15,7 +15,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 // BONUS: Make this a function rather than a class
 // Make sure to use useState instead of defining state
-export default function App {
+export default class App extends React.Component{
   // Here's what we will do step by step:
   // 1. Automatically add ToDo items by setting up an interval in componentDidMount 
   // 2. Stop the automatic addition of ToDo items in componentWillUnmount
