@@ -21,9 +21,15 @@ export default function App() {
 
   // TODO: Use "useEffect" to begin our interval (like componentDidMount)
   // and to close our interval (like componentWillUnmount)
-  useEffect(() => {
+  useEffect(
+    () => {
     // Write your code here
-  }, [todos, count]); // This basically tells useEffect that we want it to run every time todos or count changes.
+    }, 
+    
+    // This basically tells useEffect that we want it to run only when todos 
+    // or count changes.
+    [todos, count]
+  ); 
 
   onChangeText = text => {
     setText(text);
